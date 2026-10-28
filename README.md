@@ -17,7 +17,7 @@
 | [Приёмка и учёт](skills/product-development/references/acceptance.md)        | Отчёт, проверка пользователем, фидбек и задача в трекере задач –> Linear.                                                    |
 | [Проверка подключения](connection-check.md)                                  | Проверка всех сред на каждом компьютере.                                                                    |
 
-Навык оформлен по [Agent Skills](https://agentskills.io/specification). Единственное отступление — поле `disable-model-invocation` в заголовке `SKILL.md`: оно не входит в спецификацию, поэтому эталонный валидатор `skills-ref` и загрузка навыка в claude.ai или Skills API его отвергнут; поле нужно для Claude Code и сохраняется. Папка навыка содержит всё необходимое для процесса; локальные ссылки навыка ведут только к файлам внутри неё. Особые инструменты, язык программирования, Linear не являются условием работы. Без встроенных помощников используются отдельные чаты; без Linear локально сохраняется описание задачи, подготовленное для Linear.
+Навык оформлен по [Agent Skills](https://agentskills.io/specification). Единственное отступление — поле `disable-model-invocation` в заголовке `SKILL.md`: оно не входит в спецификацию, поэтому эталонный валидатор `skills-ref` и загрузка навыка в claude.ai или Skills API его отвергнут; поле нужно для Claude Code и Antigravity и сохраняется. Папка навыка содержит всё необходимое для процесса; локальные ссылки навыка ведут только к файлам внутри неё. Особые инструменты, язык программирования, Linear не являются условием работы. Без встроенных помощников используются отдельные чаты; без Linear локально сохраняется описание задачи, подготовленное для Linear.
 
 ## Явный вызов
 
@@ -27,7 +27,7 @@
 Используй $product-development для работы над LIM-7 (задача из Linear/файл *.md с описанием задачи).
 ```
 
-В Claude Code команда стоит в начале сообщения, а текст после имени передаётся навыку:
+В Claude Code и Antigravity команда стоит в начале сообщения, а текст после имени передаётся навыку:
 
 ```text
 /product-development LIM-7
@@ -35,24 +35,27 @@
 
 Вызов действует на дальнейшие шаги этой задачи в текущем чате. Для другой задачи и для продолжения в новом самостоятельном чате вызовите навык снова; принятые решения задачи сохраняются. Отдельным авторам передаются исходный вызов пользователя и границы их работы.
 
-В Codex автоматический выбор отключён настройкой `policy.allow_implicit_invocation: false` в `agents/openai.yaml`, в Claude Code — полем `disable-model-invocation: true` в заголовке `SKILL.md`. В среде без поддержки навыков (ручной режим) условие явного вызова задано в описании и тексте навыка; его соблюдение нужно проверить по [инструкции проверки](connection-check.md).
+В Codex автоматический выбор отключён настройкой `policy.allow_implicit_invocation: false` в `agents/openai.yaml`, в Claude Code и Antigravity — полем `disable-model-invocation: true` в заголовке `SKILL.md`. В среде без поддержки навыков (ручной режим) условие явного вызова задано в описании и тексте навыка; его соблюдение нужно проверить по [инструкции проверки](connection-check.md).
 
 Обязательные правила читаются из `references/rules.md` при использовании навыка. Копировать их в глобальные инструкции среды не требуется.
 
-## Codex и Claude Code: один локальный навык
+## Codex, Claude Code и Antigravity: один локальный навык
 
-Codex использует пользовательский каталог `~/.agents/skills`; Claude Code — `~/.claude/skills`. Обе среды поддерживают формат [Agent Skills](https://agentskills.io/specification) и по документации читают навык из символической ссылки. Поэтому на каждом компьютере можно подключить одну папку этого репозитория сразу в оба каталога. [Codex](https://learn.chatgpt.com/docs/build-skills), [Claude Code](https://code.claude.com/docs/en/skills).
+Codex использует пользовательский каталог `~/.agents/skills`; Claude Code — `~/.claude/skills`; Antigravity (приложение, IDE и консольная программа `agy`) — `~/.gemini/config/skills`. Все три среды поддерживают формат [Agent Skills](https://agentskills.io/specification) и читают навык из символической ссылки. Поэтому на каждом компьютере можно подключить одну папку этого репозитория сразу во все каталоги. [Codex](https://learn.chatgpt.com/docs/build-skills), [Claude Code](https://code.claude.com/docs/en/skills), [Antigravity](https://antigravity.google/docs/skills).
 
 Сначала проверьте, нет ли уже `product-development` в каждом используемом каталоге навыков. Сохраните существующие версии и выясните их происхождение; не создавайте несколько копий с одинаковым именем. При свободных путях:
 
 ```sh
 PROCESS_REPO="$HOME/Projects/ai-development-process"
-mkdir -p "$HOME/.agents/skills" "$HOME/.claude/skills"
+mkdir -p "$HOME/.agents/skills" "$HOME/.claude/skills" "$HOME/.gemini/config/skills"
 ln -s "$PROCESS_REPO/skills/product-development" "$HOME/.agents/skills/product-development"
 ln -s "$PROCESS_REPO/skills/product-development" "$HOME/.claude/skills/product-development"
+ln -s "$PROCESS_REPO/skills/product-development" "$HOME/.gemini/config/skills/product-development"
 ```
 
-Если репозиторий находится в другой папке, замените значение `PROCESS_REPO`. Если предпочитаете копирование, перенесите **всю** папку `skills/product-development`, включая `references` и `agents`, в каталоги тех сред, которыми пользуетесь: `~/.agents/skills/product-development` для Codex, `~/.claude/skills/product-development` для Claude Code. Расширение Claude Code для VS Code и редакторов на его основе использует тот же каталог `~/.claude/skills`. Такие копии после обновления репозитория нужно обновлять отдельно. Для обнаружения навыка начните новую сессию; при необходимости перезапустите приложение. Имя навыка — `product-development`. В Claude Code явный вызов — `/product-development` в начале сообщения.
+Если репозиторий находится в другой папке, замените значение `PROCESS_REPO`. Если предпочитаете копирование, перенесите **всю** папку `skills/product-development`, включая `references` и `agents`, в каталоги тех сред, которыми пользуетесь: `~/.agents/skills/product-development` для Codex, `~/.claude/skills/product-development` для Claude Code, `~/.gemini/config/skills/product-development` для Antigravity. Расширение Claude Code для VS Code и редакторов на его основе использует тот же каталог `~/.claude/skills`. Такие копии после обновления репозитория нужно обновлять отдельно. Для обнаружения навыка начните новую сессию; при необходимости перезапустите приложение. Имя навыка — `product-development`. В Claude Code и Antigravity явный вызов — `/product-development` в начале сообщения.
+
+В Antigravity наличие навыка проверяется без запуска модели: `agy -p "/skills" --output-format json` должен показать `product-development` с путём в `~/.gemini/config/skills` и `"model_invocable": false`. В уже открытой сессии `agy` список навыков обновляет `/skills reload`.
 
 Эти пути относятся к локальному компьютеру. При работе в удалённой среде проверяется её собственное подключение; локальная установка не доказывает его наличие там. [Расположение навыков Claude Code](https://code.claude.com/docs/en/skills#where-skills-live).
 Путь `~/.claude/skills/product-development` подключает навык локально в Claude Code; он не устанавливает его в веб-сессии или другую удалённую среду. Для таких сред подключение проверяется отдельно.
