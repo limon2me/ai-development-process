@@ -14,7 +14,7 @@ tools:
   - run_command
   - manage_task
   - send_message
-model: inherit
+model: flash
 subagent: true
 mainAgent: false
 ---
