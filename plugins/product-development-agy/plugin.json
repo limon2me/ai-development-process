@@ -1,0 +1,6 @@
+{
+  "name": "product-development-agy",
+  "displayName": "Product Development (Antigravity Guards)",
+  "description": "Ролевые агенты (pd-test-author, pd-implementer, pd-reviewer) и защитные правила для навыка product-development в среде Antigravity.",
+  "version": "1.0.0"
+}

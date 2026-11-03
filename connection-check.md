@@ -44,3 +44,10 @@
 ```
 
 Правила `product-development` не должны переноситься на новую задачу автоматически. Для продолжения прежней задачи в новом самостоятельном чате явно вызовите навык снова и передайте сохранённое состояние; подтверждённые согласования должны сохраниться.
+
+## 4. Проверить плагин и агентов в Antigravity
+
+При использовании Antigravity проверьте подключение плагина `product-development-agy` (см. [docs/antigravity-gemini.md](docs/antigravity-gemini.md)):
+
+1. Символическая ссылка `~/.gemini/config/plugins/product-development-agy` должна указывать на `plugins/product-development-agy` этого репозитория.
+2. После перезапуска Antigravity должны быть доступны ролевые агенты `pd-test-author`, `pd-implementer` и `pd-reviewer` (у `pd-reviewer` отсутствуют инструменты редактирования файлов).

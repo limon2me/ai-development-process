@@ -15,6 +15,7 @@
 | [Архитектура и блоки](skills/product-development/references/architecture.md) | Обязанности модулей, зависимости, контрольный вопрос и план.                                                |
 | [Передача работы](skills/product-development/references/handoffs.md)         | Независимые сессии, состояния файлов, принятые тесты и продолжение.                                         |
 | [Приёмка и учёт](skills/product-development/references/acceptance.md)        | Отчёт, проверка пользователем, фидбек и задача в трекере задач –> Linear.                                                    |
+| [Настройки Antigravity и Gemini](docs/antigravity-gemini.md)                 | Отдельный документ и плагин `plugins/product-development-agy/` для защиты от слабостей младших моделей Gemini в Antigravity. |
 | [Проверка подключения](connection-check.md)                                  | Проверка всех сред на каждом компьютере.                                                                    |
 
 Навык оформлен по [Agent Skills](https://agentskills.io/specification). Единственное отступление — поле `disable-model-invocation` в заголовке `SKILL.md`: оно не входит в спецификацию, поэтому эталонный валидатор `skills-ref` и загрузка навыка в claude.ai или Skills API его отвергнут; поле нужно для Claude Code и Antigravity и сохраняется. Папка навыка содержит всё необходимое для процесса; локальные ссылки навыка ведут только к файлам внутри неё. Особые инструменты, язык программирования, Linear не являются условием работы. Без встроенных помощников используются отдельные чаты; без Linear локально сохраняется описание задачи, подготовленное для Linear.
@@ -47,10 +48,11 @@ Codex использует пользовательский каталог `~/.a
 
 ```sh
 PROCESS_REPO="$HOME/Projects/ai-development-process"
-mkdir -p "$HOME/.agents/skills" "$HOME/.claude/skills" "$HOME/.gemini/config/skills"
+mkdir -p "$HOME/.agents/skills" "$HOME/.claude/skills" "$HOME/.gemini/config/skills" "$HOME/.gemini/config/plugins"
 ln -s "$PROCESS_REPO/skills/product-development" "$HOME/.agents/skills/product-development"
 ln -s "$PROCESS_REPO/skills/product-development" "$HOME/.claude/skills/product-development"
 ln -s "$PROCESS_REPO/skills/product-development" "$HOME/.gemini/config/skills/product-development"
+ln -s "$PROCESS_REPO/plugins/product-development-agy" "$HOME/.gemini/config/plugins/product-development-agy"
 ```
 
 Если репозиторий находится в другой папке, замените значение `PROCESS_REPO`. Если предпочитаете копирование, перенесите **всю** папку `skills/product-development`, включая `references` и `agents`, в каталоги тех сред, которыми пользуетесь: `~/.agents/skills/product-development` для Codex, `~/.claude/skills/product-development` для Claude Code, `~/.gemini/config/skills/product-development` для Antigravity. Расширение Claude Code для VS Code и редакторов на его основе использует тот же каталог `~/.claude/skills`. Такие копии после обновления репозитория нужно обновлять отдельно. Для обнаружения навыка начните новую сессию; при необходимости перезапустите приложение. Имя навыка — `product-development`. В Claude Code и Antigravity явный вызов — `/product-development` в начале сообщения.
