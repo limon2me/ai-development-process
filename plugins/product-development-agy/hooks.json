@@ -1,0 +1,27 @@
+{
+  "product-development-session-rules": {
+    "enabled": true,
+    "SessionStart": [
+      {
+        "type": "command",
+        "command": "python3 ./hooks/inject_hard_limits.py",
+        "timeout": 10
+      }
+    ]
+  },
+  "product-development-safety-guards": {
+    "enabled": true,
+    "PreToolUse": [
+      {
+        "matcher": "run_command|read_file|view_file|edit_file|write_file|replace_file_content|write_to_file",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ./hooks/guard_tools.py",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}
